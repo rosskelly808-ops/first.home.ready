@@ -1,0 +1,669 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>First Home Ready Score — Free Australian Assessment</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500&display=swap" rel="stylesheet">
+
+<!-- ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░
+     CONFIGURATION — fill these 4 values in before going live
+     See README comments next to each line for instructions
+░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░ -->
+<script>
+const CONFIG = {
+  // Paste your Google Apps Script Web App URL here
+  // (Deploy > New deployment > Web App > Anyone)
+  SHEETS_URL: 'YOUR_APPS_SCRIPT_URL_HERE',
+
+  // From emailjs.com > Account > API Keys
+  EMAILJS_PUBLIC_KEY: 'YOUR_EMAILJS_PUBLIC_KEY',
+
+  // From emailjs.com > Email Services > your service
+  EMAILJS_SERVICE_ID: 'YOUR_EMAILJS_SERVICE_ID',
+
+  // From emailjs.com > Email Templates > your template
+  EMAILJS_TEMPLATE_ID: 'YOUR_EMAILJS_TEMPLATE_ID',
+};
+</script>
+
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --navy:       #1B2A4A;
+  --navy-dark:  #111d33;
+  --gold:       #C9A84C;
+  --gold-light: #F5EDD6;
+  --gold-dark:  #b8952e;
+  --cream:      #FAF8F4;
+  --white:      #ffffff;
+  --text:       #2C2C2A;
+  --muted:      #888780;
+  --border:     #D3D1C7;
+  --success:    #3B6D11;
+  --success-bg: #EAF3DE;
+  --warn:       #854F0B;
+  --warn-bg:    #FAEEDA;
+  --danger:     #A32D2D;
+  --danger-bg:  #FCEBEB;
+}
+
+html { scroll-behavior: smooth; }
+body { font-family: 'DM Sans', sans-serif; background: var(--cream); color: var(--text); min-height: 100vh; -webkit-font-smoothing: antialiased; }
+
+/* NAV */
+.nav { background: var(--white); border-bottom: 0.5px solid var(--border); padding: 0 1.5rem; height: 60px; display: flex; align-items: center; justify-content: space-between; position: sticky; top: 0; z-index: 100; }
+.nav-logo { font-family: 'DM Serif Display', serif; font-size: 18px; color: var(--navy); text-decoration: none; }
+.nav-logo span { color: var(--gold); }
+.nav-back { font-size: 13px; color: var(--muted); text-decoration: none; display: flex; align-items: center; gap: 5px; transition: color 0.15s; }
+.nav-back:hover { color: var(--navy); }
+
+/* LAYOUT */
+.app { max-width: 680px; margin: 0 auto; padding: 2.5rem 1.25rem 5rem; }
+
+/* SCREENS */
+.screen { display: none; }
+.screen.active { display: block; animation: fadeUp 0.4s ease forwards; }
+@keyframes fadeUp { from { opacity: 0; transform: translateY(14px); } to { opacity: 1; transform: translateY(0); } }
+
+/* SHARED BUTTONS */
+.btn-primary { display: block; width: 100%; font-family: 'DM Sans', sans-serif; font-size: 16px; font-weight: 500; padding: 16px 24px; border: none; border-radius: 10px; cursor: pointer; transition: background 0.2s, transform 0.1s, opacity 0.2s; text-align: center; text-decoration: none; }
+.btn-primary:active { transform: scale(0.98); }
+.btn-primary:disabled { opacity: 0.4; cursor: not-allowed; transform: none; pointer-events: none; }
+.btn-navy { background: var(--navy); color: var(--white); }
+.btn-navy:hover { background: var(--navy-dark); }
+.btn-gold { background: var(--gold); color: var(--navy); }
+.btn-gold:hover { background: var(--gold-dark); }
+
+/* INTRO */
+.intro-badge { display: inline-block; background: var(--gold-light); color: var(--warn); font-size: 11px; font-weight: 500; padding: 5px 14px; border-radius: 20px; margin-bottom: 1.5rem; letter-spacing: 0.06em; text-transform: uppercase; }
+.intro h1 { font-family: 'DM Serif Display', serif; font-size: clamp(28px, 5.5vw, 42px); line-height: 1.18; color: var(--navy); margin-bottom: 1rem; }
+.intro h1 em { font-style: italic; color: var(--gold); }
+.intro-sub { font-size: 16px; color: var(--muted); line-height: 1.75; margin-bottom: 2rem; max-width: 540px; }
+.pillars { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-bottom: 2rem; }
+.pillar { background: var(--white); border: 0.5px solid var(--border); border-radius: 10px; padding: 16px 12px; text-align: center; }
+.pillar-icon { font-size: 22px; display: block; margin-bottom: 7px; }
+.pillar-label { font-size: 12px; color: var(--muted); line-height: 1.45; }
+.time-note { text-align: center; font-size: 13px; color: var(--muted); margin-top: 10px; }
+.intro-divider { border: none; border-top: 0.5px solid var(--border); margin: 2.5rem 0; }
+.trust-row { display: flex; gap: 1.5rem; justify-content: center; flex-wrap: wrap; }
+.trust-item { display: flex; align-items: center; gap: 7px; font-size: 13px; color: var(--muted); }
+.trust-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--gold); flex-shrink: 0; }
+
+/* QUIZ */
+.progress-wrap { margin-bottom: 2rem; }
+.progress-meta { display: flex; justify-content: space-between; font-size: 13px; color: var(--muted); margin-bottom: 8px; align-items: center; }
+.progress-dim { display: flex; align-items: center; gap: 5px; font-size: 12px; font-weight: 500; color: var(--gold-dark); background: var(--gold-light); padding: 3px 10px; border-radius: 20px; }
+.progress-bar { height: 5px; background: var(--border); border-radius: 3px; overflow: hidden; }
+.progress-fill { height: 100%; background: var(--gold); border-radius: 3px; transition: width 0.45s cubic-bezier(.4,0,.2,1); }
+.q-card { background: var(--white); border: 0.5px solid var(--border); border-radius: 16px; padding: 2rem 1.75rem; margin-bottom: 1.25rem; }
+.q-dim-label { display: inline-block; font-size: 11px; font-weight: 500; text-transform: uppercase; letter-spacing: 0.07em; color: var(--gold-dark); margin-bottom: 0.85rem; }
+.q-text { font-family: 'DM Serif Display', serif; font-size: 20px; line-height: 1.42; color: var(--navy); margin-bottom: 1.5rem; }
+.options { display: flex; flex-direction: column; gap: 10px; }
+.opt-btn { background: var(--cream); border: 1.5px solid var(--border); border-radius: 9px; padding: 13px 16px; font-family: 'DM Sans', sans-serif; font-size: 15px; color: var(--text); cursor: pointer; text-align: left; transition: border-color 0.15s, background 0.15s; display: flex; align-items: center; gap: 12px; line-height: 1.4; }
+.opt-btn:hover { border-color: var(--gold); background: var(--gold-light); }
+.opt-btn.selected { border-color: var(--navy); background: var(--navy); color: var(--white); }
+.opt-dot { width: 20px; height: 20px; border-radius: 50%; border: 1.5px solid currentColor; flex-shrink: 0; display: flex; align-items: center; justify-content: center; }
+.opt-btn.selected .opt-dot::after { content: ''; width: 9px; height: 9px; border-radius: 50%; background: var(--white); display: block; }
+.nav-row { display: flex; gap: 10px; align-items: center; }
+.btn-back { flex: 0 0 auto; background: transparent; border: 1.5px solid var(--border); color: var(--muted); font-family: 'DM Sans', sans-serif; font-size: 15px; padding: 13px 20px; border-radius: 9px; cursor: pointer; transition: border-color 0.15s, color 0.15s; }
+.btn-back:hover { border-color: var(--navy); color: var(--navy); }
+.btn-next { flex: 1; background: var(--navy); color: var(--white); font-family: 'DM Sans', sans-serif; font-size: 15px; font-weight: 500; padding: 13px 20px; border: none; border-radius: 9px; cursor: pointer; transition: background 0.2s, opacity 0.2s; opacity: 0.38; pointer-events: none; }
+.btn-next.enabled { opacity: 1; pointer-events: auto; }
+.btn-next.enabled:hover { background: var(--navy-dark); }
+
+/* EMAIL GATE */
+.gate-card { background: var(--white); border: 0.5px solid var(--border); border-radius: 18px; padding: 2.5rem 2rem; }
+.gate-icon { font-size: 44px; display: block; text-align: center; margin-bottom: 1.1rem; }
+.gate-card h2 { font-family: 'DM Serif Display', serif; font-size: clamp(22px, 4vw, 30px); color: var(--navy); margin-bottom: 0.75rem; line-height: 1.25; text-align: center; }
+.gate-intro { font-size: 15px; color: var(--muted); line-height: 1.7; margin-bottom: 2rem; text-align: center; max-width: 460px; margin-left: auto; margin-right: auto; }
+.form-group { margin-bottom: 1.1rem; }
+.form-label { display: block; font-size: 13px; font-weight: 500; color: var(--navy); margin-bottom: 6px; }
+.form-input { width: 100%; padding: 13px 15px; border: 1.5px solid var(--border); border-radius: 9px; font-family: 'DM Sans', sans-serif; font-size: 15px; color: var(--text); background: var(--cream); transition: border-color 0.15s, background 0.15s; outline: none; }
+.form-input:focus { border-color: var(--navy); background: var(--white); }
+.form-input.error { border-color: var(--danger); }
+.error-msg { font-size: 12px; color: var(--danger); margin-top: 5px; display: none; }
+.error-msg.visible { display: block; }
+.checkbox-wrapper { background: var(--gold-light); border: 1.5px solid var(--gold); border-radius: 12px; padding: 16px; margin: 1.5rem 0; cursor: pointer; transition: background 0.15s; }
+.checkbox-wrapper:hover { background: #edddb8; }
+.checkbox-row { display: flex; align-items: flex-start; gap: 12px; }
+.checkbox-row input[type="checkbox"] { width: 20px; height: 20px; flex-shrink: 0; margin-top: 2px; accent-color: var(--navy); cursor: pointer; }
+.checkbox-label { font-size: 14px; font-weight: 500; color: var(--navy); line-height: 1.5; cursor: pointer; }
+.checkbox-label small { display: block; font-weight: 400; color: var(--muted); font-size: 13px; margin-top: 3px; }
+.privacy-note { font-size: 12px; color: var(--muted); text-align: center; margin-top: 10px; line-height: 1.5; }
+.gate-submitting { text-align: center; padding: 2rem 0; }
+.spinner { width: 34px; height: 34px; border: 3px solid var(--border); border-top-color: var(--navy); border-radius: 50%; animation: spin 0.7s linear infinite; margin: 0 auto 1rem; }
+@keyframes spin { to { transform: rotate(360deg); } }
+.gate-submitting p { font-size: 14px; color: var(--muted); }
+
+/* RESULTS */
+.results-header { text-align: center; margin-bottom: 2rem; }
+.results-header h2 { font-family: 'DM Serif Display', serif; font-size: clamp(24px, 4.5vw, 36px); color: var(--navy); margin-bottom: 0.4rem; }
+.results-header p { font-size: 15px; color: var(--muted); }
+.email-sent-banner { background: var(--success-bg); border: 1px solid #9FE1CB; border-radius: 10px; padding: 12px 16px; font-size: 14px; color: var(--success); margin-bottom: 1.5rem; display: flex; align-items: center; gap: 8px; line-height: 1.4; }
+.overall-score { background: var(--navy); border-radius: 18px; padding: 2.25rem 2rem; text-align: center; margin-bottom: 1.5rem; }
+.score-number { font-family: 'DM Serif Display', serif; font-size: 80px; line-height: 1; color: var(--gold); }
+.score-out { font-size: 14px; color: rgba(255,255,255,0.55); margin-top: 4px; }
+.score-tier { font-size: 17px; font-weight: 500; margin-top: 14px; line-height: 1.4; color: var(--white); }
+.section-heading { font-family: 'DM Serif Display', serif; font-size: 22px; color: var(--navy); margin-bottom: 1rem; }
+.dim-grid { display: flex; flex-direction: column; gap: 10px; margin-bottom: 2rem; }
+.dim-card { background: var(--white); border: 0.5px solid var(--border); border-radius: 12px; padding: 1rem 1.25rem; }
+.dim-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 9px; gap: 8px; flex-wrap: wrap; }
+.dim-name { font-size: 14px; font-weight: 500; color: var(--navy); }
+.dim-badge { font-size: 12px; font-weight: 500; padding: 3px 11px; border-radius: 20px; flex-shrink: 0; }
+.badge-strong { background: var(--success-bg); color: var(--success); }
+.badge-mid    { background: var(--warn-bg);    color: var(--warn); }
+.badge-weak   { background: var(--danger-bg);  color: var(--danger); }
+.dim-bar-bg { height: 6px; background: var(--border); border-radius: 3px; overflow: hidden; margin-bottom: 8px; }
+.dim-bar-fill { height: 100%; border-radius: 3px; transition: width 0.9s cubic-bezier(.4,0,.2,1); }
+.bar-strong { background: var(--success); }
+.bar-mid    { background: var(--gold); }
+.bar-weak   { background: var(--danger); }
+.dim-insight { font-size: 13px; color: var(--muted); line-height: 1.55; }
+.action-cards { display: flex; flex-direction: column; gap: 10px; margin-bottom: 2rem; }
+.action-card { background: var(--white); border: 0.5px solid var(--border); border-left: 3px solid var(--gold); border-radius: 0 12px 12px 0; padding: 1.1rem 1.25rem; }
+.action-priority { font-size: 11px; font-weight: 500; text-transform: uppercase; letter-spacing: 0.07em; color: var(--gold-dark); margin-bottom: 4px; }
+.action-title { font-size: 15px; font-weight: 500; color: var(--navy); margin-bottom: 5px; }
+.action-text  { font-size: 13px; color: var(--muted); line-height: 1.6; }
+.cta-block { background: var(--gold-light); border: 1px solid var(--gold); border-radius: 16px; padding: 2rem 1.75rem; text-align: center; margin-bottom: 1.5rem; }
+.cta-block h3 { font-family: 'DM Serif Display', serif; font-size: 22px; color: var(--navy); margin-bottom: 0.6rem; }
+.cta-block p { font-size: 14px; color: var(--muted); margin-bottom: 1.25rem; line-height: 1.6; }
+.restart-btn { background: transparent; border: none; font-family: 'DM Sans', sans-serif; font-size: 13px; color: var(--muted); cursor: pointer; text-decoration: underline; display: block; margin: 1rem auto 0; text-align: center; }
+.restart-btn:hover { color: var(--navy); }
+
+/* FOOTER */
+.footer { text-align: center; padding: 2rem 1.5rem; border-top: 0.5px solid var(--border); margin-top: 4rem; font-size: 12px; color: var(--muted); line-height: 1.6; }
+.footer a { color: var(--muted); text-decoration: underline; }
+
+/* RESPONSIVE */
+@media (max-width: 520px) {
+  .pillars { grid-template-columns: 1fr; }
+  .nav-row { flex-direction: column-reverse; }
+  .btn-back { text-align: center; width: 100%; }
+  .q-card { padding: 1.5rem 1.25rem; }
+  .gate-card { padding: 1.75rem 1.25rem; }
+  .overall-score { padding: 1.75rem 1.25rem; }
+  .trust-row { flex-direction: column; align-items: center; gap: 0.75rem; }
+}
+</style>
+</head>
+<body>
+
+<nav class="nav">
+  <a href="/" class="nav-logo">First Home <span>Ready</span></a>
+  <a href="javascript:history.back()" class="nav-back">← Back to home</a>
+</nav>
+
+<div class="app">
+
+  <!-- ══ SCREEN 1: INTRO ══ -->
+  <div id="screen-intro" class="screen active">
+    <div class="intro-badge">Free 5-minute assessment</div>
+    <div class="intro">
+      <h1>Find out if you're <em>actually</em> ready to buy your first home.</h1>
+      <p class="intro-sub">Answer 24 honest questions across 6 key dimensions. Get your personalised readiness score and a clear action plan — so you stop wasting weekends at the wrong inspections.</p>
+    </div>
+    <div class="pillars">
+      <div class="pillar"><span class="pillar-icon">🏦</span><span class="pillar-label">Know your real borrowing readiness before the bank tells you no</span></div>
+      <div class="pillar"><span class="pillar-icon">🎯</span><span class="pillar-label">Discover which of the 6 key areas is holding you back</span></div>
+      <div class="pillar"><span class="pillar-icon">📋</span><span class="pillar-label">Get a personalised action plan — not generic advice</span></div>
+    </div>
+    <button class="btn-primary btn-gold" onclick="startQuiz()">Start My Free Assessment →</button>
+    <p class="time-note">Takes 5 minutes · No login required · Built for Australians</p>
+    <hr class="intro-divider">
+    <div class="trust-row">
+      <div class="trust-item"><span class="trust-dot"></span>24 questions · 6 dimensions</div>
+      <div class="trust-item"><span class="trust-dot"></span>Personalised score breakdown</div>
+      <div class="trust-item"><span class="trust-dot"></span>Tailored action plan</div>
+      <div class="trust-item"><span class="trust-dot"></span>100% free</div>
+    </div>
+  </div>
+
+  <!-- ══ SCREEN 2: QUIZ ══ -->
+  <div id="screen-quiz" class="screen">
+    <div class="progress-wrap">
+      <div class="progress-meta">
+        <span id="q-counter">Question 1 of 24</span>
+        <span class="progress-dim" id="dim-pill">🏦 Financial Preparation</span>
+      </div>
+      <div class="progress-bar"><div class="progress-fill" id="prog-fill" style="width:4%;"></div></div>
+    </div>
+    <div class="q-card">
+      <div class="q-dim-label" id="q-dim-label"></div>
+      <div class="q-text" id="q-text"></div>
+      <div class="options" id="q-options"></div>
+    </div>
+    <div class="nav-row">
+      <button class="btn-back" id="btn-back" onclick="prevQ()">← Back</button>
+      <button class="btn-next" id="btn-next" onclick="nextQ()">Continue →</button>
+    </div>
+  </div>
+
+  <!-- ══ SCREEN 3: EMAIL GATE ══ -->
+  <div id="screen-gate" class="screen">
+    <div class="gate-card">
+      <span class="gate-icon">🎯</span>
+      <h2>Your score is ready — where should we send it?</h2>
+      <p class="gate-intro">Enter your details below to unlock your personalised First Home Ready Score and action plan. We will never send you spam — this is the good stuff only.</p>
+
+      <div id="gate-form">
+        <div class="form-group">
+          <label class="form-label" for="input-name">First name</label>
+          <input class="form-input" type="text" id="input-name" placeholder="e.g. Alex" autocomplete="given-name">
+          <div class="error-msg" id="err-name">Please enter your first name.</div>
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="input-email">Email address</label>
+          <input class="form-input" type="email" id="input-email" placeholder="you@example.com" autocomplete="email">
+          <div class="error-msg" id="err-email">Please enter a valid email address.</div>
+        </div>
+
+        <label class="checkbox-wrapper" for="chk-report">
+          <div class="checkbox-row">
+            <input type="checkbox" id="chk-report" checked>
+            <span class="checkbox-label">
+              Email me my full report
+              <small>Get your score breakdown and personalised action plan sent to your inbox so you can refer back to it anytime.</small>
+            </span>
+          </div>
+        </label>
+
+        <button class="btn-primary btn-gold" id="btn-submit" onclick="submitGate()">Show Me My Score →</button>
+        <p class="privacy-note">🔒 No spam, ever. Your details are only used to send your report. Unsubscribe anytime.</p>
+      </div>
+
+      <div id="gate-submitting" style="display:none;" class="gate-submitting">
+        <div class="spinner"></div>
+        <p>Calculating your score and saving your results…</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══ SCREEN 4: RESULTS ══ -->
+  <div id="screen-results" class="screen">
+    <div class="results-header">
+      <h2>Your First Home Ready Score</h2>
+      <p id="results-subheading">Personalised breakdown across your 6 readiness dimensions</p>
+    </div>
+
+    <div id="email-sent-banner" class="email-sent-banner" style="display:none;">
+      ✅ <span id="email-sent-text">Your report has been sent to your inbox.</span>
+    </div>
+
+    <div class="overall-score">
+      <div class="score-number" id="overall-num">—</div>
+      <div class="score-out">out of 100</div>
+      <div class="score-tier" id="score-tier"></div>
+    </div>
+
+    <h3 class="section-heading">Your dimension breakdown</h3>
+    <div class="dim-grid" id="dim-grid"></div>
+
+    <h3 class="section-heading">Your personalised action plan</h3>
+    <div class="action-cards" id="action-cards"></div>
+
+    <div class="cta-block">
+      <h3>Ready to take the next step?</h3>
+      <p>Get the complete First Home Buyer OS — a step-by-step system built for Australians who want to buy with clarity, not anxiety.</p>
+      <a href="/" class="btn-primary btn-gold">Take Me Back to the Homepage →</a>
+    </div>
+
+    <button class="restart-btn" onclick="restartQuiz()">Retake the assessment from the beginning</button>
+  </div>
+
+</div><!-- /app -->
+
+<footer class="footer">
+  <p>First Home Ready Score is an educational tool only and does not constitute financial advice.<br>
+  Always consult a licensed mortgage broker or financial adviser before making property decisions.<br>
+  <a href="/">← Return to homepage</a></p>
+</footer>
+
+<!-- EmailJS SDK (loaded from CDN) -->
+<script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+
+<script>
+/* ══════════════════════════════════════════
+   DATA
+══════════════════════════════════════════ */
+const DIMS = [
+  { id:'financial', label:'Financial Preparation',  icon:'🏦' },
+  { id:'borrowing', label:'Borrowing Capacity',      icon:'💳' },
+  { id:'market',    label:'Market Knowledge',        icon:'📊' },
+  { id:'process',   label:'Process Understanding',   icon:'📋' },
+  { id:'decision',  label:'Decision Clarity',        icon:'🎯' },
+  { id:'emotional', label:'Emotional Readiness',     icon:'🧠' }
+];
+
+const QUESTIONS = [
+  {dim:'financial',text:'How much of a deposit do you currently have saved relative to your target purchase price?',opts:[{t:'Less than 5%',s:1},{t:'5–10%',s:2},{t:'10–15%',s:3},{t:'20% or more',s:4}]},
+  {dim:'financial',text:'Do you have a separate emergency fund (3–6 months of expenses) on top of your deposit savings?',opts:[{t:'No emergency fund at all',s:1},{t:'Less than 1 month saved',s:2},{t:'1–3 months saved',s:3},{t:'3+ months saved',s:4}]},
+  {dim:'financial',text:'How well do you understand all the upfront costs beyond the deposit (stamp duty, conveyancing, inspections, etc.)?',opts:[{t:"I haven't looked into this yet",s:1},{t:'I have a rough idea',s:2},{t:"I've researched most of them",s:3},{t:'I have a precise budget for each cost',s:4}]},
+  {dim:'financial',text:'Have you checked your eligibility for any Australian government first-home buyer schemes (FHSS, First Home Guarantee, state grants)?',opts:[{t:"I didn't know these existed",s:1},{t:"I know they exist but haven't checked",s:2},{t:"I've looked into one of them",s:3},{t:'I know exactly which ones I qualify for',s:4}]},
+  {dim:'borrowing',text:'Have you received a formal pre-approval from a lender or mortgage broker?',opts:[{t:'No, not started',s:1},{t:'I know my rough estimate',s:2},{t:'Pre-approval in progress',s:3},{t:'Full pre-approval in hand',s:4}]},
+  {dim:'borrowing',text:'Do you know your current credit score, and have you checked for any errors on your credit report?',opts:[{t:"I've never checked",s:1},{t:'I have a vague idea',s:2},{t:"I've checked it once",s:3},{t:'Checked recently and it is in good shape',s:4}]},
+  {dim:'borrowing',text:'Do you have any open credit cards, personal loans, or HECS/HELP debt that could affect your borrowing capacity?',opts:[{t:'Yes — significant debt I have not accounted for',s:1},{t:'Yes — but I am not sure of the impact',s:2},{t:'Yes — I have modelled the impact',s:3},{t:'No significant liabilities',s:4}]},
+  {dim:'borrowing',text:'Have you compared at least three different lenders or mortgage products to understand your options?',opts:[{t:'No comparison done yet',s:1},{t:'Looked at one bank only',s:2},{t:'Spoken to a broker or two lenders',s:3},{t:'Compared 3+ options with a broker',s:4}]},
+  {dim:'market',text:'How well do you understand what properties in your target area are actually selling for (not just listed for)?',opts:[{t:'I rely on the listing price',s:1},{t:'I have a rough sense',s:2},{t:'I track recent sales occasionally',s:3},{t:'I actively track sold prices weekly',s:4}]},
+  {dim:'market',text:'Do you know the median price trend in your target suburb over the last 12 months?',opts:[{t:'No idea',s:1},{t:'I have a general feeling',s:2},{t:"I've looked it up once",s:3},{t:'I track it regularly with data',s:4}]},
+  {dim:'market',text:'How confident are you in identifying whether a property is fairly priced, overpriced, or underpriced for its suburb?',opts:[{t:'Not confident at all',s:1},{t:'Slightly confident',s:2},{t:'Moderately confident',s:3},{t:'Very confident using data',s:4}]},
+  {dim:'market',text:'How many properties have you physically inspected in your target area so far?',opts:[{t:'None yet',s:1},{t:'1–3 inspections',s:2},{t:'4–10 inspections',s:3},{t:'10+ inspections',s:4}]},
+  {dim:'process',text:'Do you understand the difference between making an offer, buying at auction, and expressions of interest?',opts:[{t:'Not at all',s:1},{t:'I understand one of them',s:2},{t:'I understand two of them',s:3},{t:'I understand all three clearly',s:4}]},
+  {dim:'process',text:'Do you know what a conveyancer does, when to engage one, and roughly what they cost?',opts:[{t:"I've never heard of this",s:1},{t:'I know the term but not the details',s:2},{t:'I know roughly what they do',s:3},{t:'I have one selected and ready to go',s:4}]},
+  {dim:'process',text:'Do you understand what a building and pest inspection involves and when to get one?',opts:[{t:'No knowledge of this',s:1},{t:'I know it exists',s:2},{t:'I understand the basics',s:3},{t:'I know exactly when and how to use one',s:4}]},
+  {dim:'process',text:'Do you understand what happens between offer acceptance and settlement?',opts:[{t:'No idea',s:1},{t:'Vague understanding',s:2},{t:'I understand the key steps',s:3},{t:'I know the full timeline and my obligations',s:4}]},
+  {dim:'decision',text:'Have you written down your non-negotiables vs. your nice-to-haves for a property?',opts:[{t:"No, it's all in my head",s:1},{t:'Loosely thought about it',s:2},{t:'Partially written down',s:3},{t:'Fully documented and prioritised',s:4}]},
+  {dim:'decision',text:'If you walked through a property tomorrow that met 80% of your criteria, how confident are you in making a clear decision?',opts:[{t:'I would panic and stall',s:1},{t:'I would feel very uncertain',s:2},{t:'Moderately confident',s:3},{t:'Very confident — I know my criteria',s:4}]},
+  {dim:'decision',text:'Do you have a clear maximum budget that you would not exceed regardless of competition or pressure?',opts:[{t:'No firm number in mind',s:1},{t:'A rough figure',s:2},{t:'A clear number, loosely held',s:3},{t:'A firm limit I would not break',s:4}]},
+  {dim:'decision',text:'Have you decided which suburbs or areas you would and would not consider, and why?',opts:[{t:'Not yet decided',s:1},{t:'One area in mind, loosely',s:2},{t:'2–3 specific areas shortlisted',s:3},{t:'Clear shortlist with data-backed rationale',s:4}]},
+  {dim:'emotional',text:'How would you describe your current emotional state when thinking about buying your first home?',opts:[{t:'Overwhelmed and stressed most of the time',s:1},{t:'Anxious but pushing through',s:2},{t:'Generally calm with occasional stress',s:3},{t:'Focused and confident',s:4}]},
+  {dim:'emotional',text:'When you miss out on a property or get outbid, how do you typically recover?',opts:[{t:'It takes me days to get back on track',s:1},{t:'It sets me back significantly',s:2},{t:'I recover within a day or two',s:3},{t:"I stay focused — it's part of the process",s:4}]},
+  {dim:'emotional',text:'Are you buying primarily because you genuinely want to own this property, or mainly because you fear being priced out?',opts:[{t:'Mostly fear of missing out',s:1},{t:'More fear than genuine desire',s:2},{t:'Roughly equal mix',s:3},{t:'Genuinely want to buy — timing feels right',s:4}]},
+  {dim:'emotional',text:'Do you have a trusted person who can help you reality-check major decisions during the process?',opts:[{t:'No one in my corner',s:1},{t:'Someone loosely available',s:2},{t:'Yes, someone helpful',s:3},{t:'Yes — a strong support person or professional',s:4}]}
+];
+
+const ACTIONS = {
+  financial:[
+    {priority:'Priority action',title:'Build your true purchase budget',text:'Calculate total cash needed: deposit + stamp duty + conveyancing + inspection fees + moving costs. Most buyers underestimate this by $15,000–$30,000. Knowing the real number prevents nasty surprises at settlement.'},
+    {priority:'Quick win',title:'Check your government scheme eligibility today',text:'Spend 20 minutes on the First Home Guarantee and your state grant portal. Many buyers leave $10,000–$35,000 on the table simply because they never checked.'}
+  ],
+  borrowing:[
+    {priority:'Priority action',title:'Get a formal pre-approval before you inspect',text:'Attending inspections without pre-approval is like shopping without knowing your budget. A mortgage broker can access 30+ lenders in one conversation and give you a borrowing number that actually reflects your situation.'},
+    {priority:'Quick win',title:'Check and clean up your credit report',text:'Get a free report from Equifax or Experian. Dispute any errors. Close credit cards you do not use — lenders count the full limit against your borrowing capacity, even at $0 balance.'}
+  ],
+  market:[
+    {priority:'Priority action',title:'Track sold prices, not listed prices',text:"Filter by 'sold' in your target suburb over the last 90 days on realestate.com.au. Do this weekly for 4 weeks — you will develop a sharp instinct for what things actually cost."},
+    {priority:'Quick win',title:'Attend 10 inspections before making any offer',text:'The first 5–6 inspections are education. By inspection 10 you will know what your money buys and what is genuinely worth pursuing.'}
+  ],
+  process:[
+    {priority:'Priority action',title:'Engage a conveyancer before you need one',text:'Find a conveyancer in your state now — before you find a property. Get a quote, ask your questions, and have their number ready. When the right property appears there is no time to start researching.'},
+    {priority:'Quick win',title:'Understand auction vs. private treaty in your state',text:'The rules differ significantly by state. In NSW there is no cooling-off period at auction. Understanding the buying method used in your market protects you from expensive mistakes.'}
+  ],
+  decision:[
+    {priority:'Priority action',title:'Write your non-negotiables and nice-to-haves today',text:'Write 5 things you will not compromise on. Then 5 things you would love but could live without. This single exercise eliminates most of the decision anxiety first-home buyers experience at inspections.'},
+    {priority:'Quick win',title:'Set your hard budget ceiling in writing',text:'Write down the maximum you will pay and tell a trusted person. In a competitive market the heat of an auction can push you past your real limit. Your future self will thank your current self.'}
+  ],
+  emotional:[
+    {priority:'Priority action',title:'Separate fear of missing out from genuine readiness',text:"If your primary motivation is panic about being priced out ask yourself: am I buying this property or am I escaping renting? Buying from fear leads to compromises you will carry for years."},
+    {priority:'Quick win',title:'Find your sounding board before you start seriously looking',text:"Identify one person — a recent buyer, trusted friend, or buyer's advocate — who will be honest with you when you are about to make a mistake."}
+  ]
+};
+
+const DIM_INSIGHTS = {
+  financial:{ strong:'Your financial foundation is solid. Focus on optimising government scheme eligibility.', mid:'Good start — sharpen your total cost budget and confirm which schemes you qualify for.', weak:'Start here. Build your deposit plan and research all upfront costs before anything else.' },
+  borrowing:{ strong:'Borrowing readiness looks strong. Keep your pre-approval current as you search.', mid:'Get a formal pre-approval — knowing your exact number changes everything about how you search.', weak:'Priority area. Clean up your credit and speak to a broker before attending any inspections.' },
+  market:   { strong:'Strong market knowledge. Keep tracking sold prices weekly to stay sharp.', mid:'Attend more inspections and start tracking sold vs. listed prices systematically.', weak:'Inspect more properties before making any offer. Volume of inspections builds market instinct.' },
+  process:  { strong:'You understand the buying process well. Engage your conveyancer now so you are ready.', mid:'Learn the rules for buying method in your state — especially what happens at auction.', weak:'Critical gap. Understanding the process protects you from costly, avoidable mistakes.' },
+  decision: { strong:'Clear decision framework. Your criteria will serve you well under competitive pressure.', mid:'Write your non-negotiables down. This single step reduces inspection anxiety dramatically.', weak:'Do this before your next inspection: write your criteria on paper and commit to them.' },
+  emotional:{ strong:'Emotionally well positioned. You appear to be buying from clarity rather than fear.', mid:'Watch the FOMO signals. Make sure your motivation is genuine, not panic.', weak:'Buying under emotional pressure leads to regret. Build your support network first.' }
+};
+
+/* ══════════════════════════════════════════
+   STATE
+══════════════════════════════════════════ */
+let current      = 0;
+let answers      = new Array(24).fill(null);
+let dimScores    = {};
+let overallScore = 0;
+let tierText     = '';
+let actionList   = [];
+let userName     = '';
+let userEmail    = '';
+
+/* ══════════════════════════════════════════
+   NAVIGATION
+══════════════════════════════════════════ */
+function showScreen(id) {
+  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+  document.getElementById('screen-' + id).classList.add('active');
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+function startQuiz() { showScreen('quiz'); renderQ(); }
+
+/* ══════════════════════════════════════════
+   QUIZ
+══════════════════════════════════════════ */
+function renderQ() {
+  const q   = QUESTIONS[current];
+  const dim = DIMS.find(d => d.id === q.dim);
+  const pct = Math.round(((current + 1) / 24) * 100);
+
+  document.getElementById('q-counter').textContent   = 'Question ' + (current + 1) + ' of 24';
+  document.getElementById('dim-pill').textContent    = dim.icon + ' ' + dim.label;
+  document.getElementById('q-dim-label').textContent = dim.icon + '  ' + dim.label;
+  document.getElementById('q-text').textContent      = q.text;
+  document.getElementById('prog-fill').style.width   = pct + '%';
+
+  const opts = document.getElementById('q-options');
+  opts.innerHTML = '';
+  q.opts.forEach((o, i) => {
+    const btn = document.createElement('button');
+    btn.className = 'opt-btn' + (answers[current] === i ? ' selected' : '');
+    btn.innerHTML = '<span class="opt-dot"></span><span>' + o.t + '</span>';
+    btn.onclick   = () => selectOpt(i);
+    opts.appendChild(btn);
+  });
+
+  document.getElementById('btn-back').style.display = current === 0 ? 'none' : 'block';
+  const nxt = document.getElementById('btn-next');
+  nxt.textContent = current === 23 ? 'Almost there →' : 'Continue →';
+  nxt.classList.toggle('enabled', answers[current] !== null);
+}
+
+function selectOpt(i) {
+  answers[current] = i;
+  document.querySelectorAll('.opt-btn').forEach((b, idx) => b.classList.toggle('selected', idx === i));
+  document.getElementById('btn-next').classList.add('enabled');
+}
+
+function nextQ() {
+  if (answers[current] === null) return;
+  if (current < 23) { current++; renderQ(); }
+  else { computeScores(); showScreen('gate'); }
+}
+
+function prevQ() { if (current > 0) { current--; renderQ(); } }
+
+/* ══════════════════════════════════════════
+   SCORING
+══════════════════════════════════════════ */
+function getDimScore(dimId) {
+  const qs    = QUESTIONS.map((q, i) => ({ q, i })).filter(({ q }) => q.dim === dimId);
+  const total = qs.reduce((sum, { q, i }) => sum + (answers[i] !== null ? q.opts[answers[i]].s : 1), 0);
+  return Math.round((total / (qs.length * 4)) * 100);
+}
+
+function computeScores() {
+  const scores = DIMS.map(d => ({ ...d, score: getDimScore(d.id) }));
+  overallScore = Math.round(scores.reduce((s, d) => s + d.score, 0) / 6);
+  dimScores    = Object.fromEntries(scores.map(d => [d.id, d.score]));
+
+  if      (overallScore >= 80) tierText = 'Strong foundation — you are nearly ready to buy with confidence.';
+  else if (overallScore >= 60) tierText = 'Building momentum — a few key gaps to close before you are ready.';
+  else if (overallScore >= 40) tierText = 'Early stage — focus on the fundamentals before entering the market.';
+  else                         tierText = 'Getting started — big gains available quickly with focused effort.';
+
+  actionList = [];
+  const shown = new Set();
+  [...scores].sort((a, b) => a.score - b.score).slice(0, 3).forEach(d => {
+    ACTIONS[d.id].forEach(a => {
+      if (!shown.has(a.title)) { shown.add(a.title); actionList.push({ ...a, dimLabel: d.label }); }
+    });
+  });
+}
+
+/* ══════════════════════════════════════════
+   EMAIL GATE SUBMISSION
+══════════════════════════════════════════ */
+function validateEmail(e) { return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(e); }
+
+function submitGate() {
+  const nameEl  = document.getElementById('input-name');
+  const emailEl = document.getElementById('input-email');
+  const errName = document.getElementById('err-name');
+  const errMail = document.getElementById('err-email');
+  let valid = true;
+
+  [nameEl, emailEl].forEach(el => el.classList.remove('error'));
+  [errName, errMail].forEach(el => el.classList.remove('visible'));
+
+  if (!nameEl.value.trim()) {
+    nameEl.classList.add('error'); errName.classList.add('visible'); valid = false;
+  }
+  if (!validateEmail(emailEl.value.trim())) {
+    emailEl.classList.add('error'); errMail.classList.add('visible'); valid = false;
+  }
+  if (!valid) return;
+
+  userName  = nameEl.value.trim();
+  userEmail = emailEl.value.trim();
+  const wantsReport = document.getElementById('chk-report').checked;
+
+  document.getElementById('gate-form').style.display       = 'none';
+  document.getElementById('gate-submitting').style.display = 'block';
+
+  /* ── Payload for Google Sheets ── */
+  const sheetsPayload = {
+    timestamp:    new Date().toISOString(),
+    name:         userName,
+    email:        userEmail,
+    wantsReport:  wantsReport ? 'Yes' : 'No',
+    overallScore: overallScore,
+    tier:         tierText,
+    financial:    dimScores.financial,
+    borrowing:    dimScores.borrowing,
+    market:       dimScores.market,
+    process:      dimScores.process,
+    decision:     dimScores.decision,
+    emotional:    dimScores.emotional,
+    action1:      actionList[0] ? actionList[0].title : '',
+    action2:      actionList[1] ? actionList[1].title : '',
+    action3:      actionList[2] ? actionList[2].title : '',
+  };
+
+  /* ── Send to Google Sheets ── */
+  const sheetsPromise = (CONFIG.SHEETS_URL && CONFIG.SHEETS_URL !== 'YOUR_APPS_SCRIPT_URL_HERE')
+    ? fetch(CONFIG.SHEETS_URL, {
+        method:  'POST',
+        mode:    'no-cors',
+        headers: { 'Content-Type': 'application/json' },
+        body:    JSON.stringify(sheetsPayload)
+      }).catch(() => null)
+    : Promise.resolve(null);
+
+  /* ── Send report email via EmailJS ── */
+  const emailConfigured = (
+    CONFIG.EMAILJS_PUBLIC_KEY  !== 'YOUR_EMAILJS_PUBLIC_KEY' &&
+    CONFIG.EMAILJS_SERVICE_ID  !== 'YOUR_EMAILJS_SERVICE_ID' &&
+    CONFIG.EMAILJS_TEMPLATE_ID !== 'YOUR_EMAILJS_TEMPLATE_ID'
+  );
+
+  const emailPromise = (wantsReport && emailConfigured)
+    ? emailjs.send(CONFIG.EMAILJS_SERVICE_ID, CONFIG.EMAILJS_TEMPLATE_ID, {
+        to_email:      userEmail,
+        to_name:       userName,
+        overall_score: String(overallScore),
+        tier:          tierText,
+        financial:     String(dimScores.financial),
+        borrowing:     String(dimScores.borrowing),
+        market:        String(dimScores.market),
+        process:       String(dimScores.process),
+        decision:      String(dimScores.decision),
+        emotional:     String(dimScores.emotional),
+        top_action_1:  actionList[0] ? actionList[0].title + ' — ' + actionList[0].text : 'N/A',
+        top_action_2:  actionList[1] ? actionList[1].title + ' — ' + actionList[1].text : 'N/A',
+        top_action_3:  actionList[2] ? actionList[2].title + ' — ' + actionList[2].text : 'N/A',
+      }).catch(() => null)
+    : Promise.resolve(null);
+
+  Promise.all([sheetsPromise, emailPromise]).then(() => {
+    renderResults(wantsReport, emailConfigured);
+  });
+}
+
+/* ══════════════════════════════════════════
+   RENDER RESULTS
+══════════════════════════════════════════ */
+function renderResults(wantsReport, emailConfigured) {
+  document.getElementById('overall-num').textContent = overallScore;
+  document.getElementById('score-tier').textContent  = tierText;
+  document.getElementById('results-subheading').textContent =
+    'Hi ' + userName + ' — here is your personalised breakdown across 6 readiness dimensions.';
+
+  /* Email sent banner */
+  const banner     = document.getElementById('email-sent-banner');
+  const bannerText = document.getElementById('email-sent-text');
+  if (wantsReport && emailConfigured) {
+    bannerText.textContent = 'Your full report has been sent to ' + userEmail;
+    banner.style.display   = 'flex';
+  } else if (wantsReport && !emailConfigured) {
+    bannerText.textContent = 'Your score has been saved. Email delivery will be active shortly.';
+    banner.style.display   = 'flex';
+  }
+
+  /* Dimension cards */
+  const grid = document.getElementById('dim-grid');
+  grid.innerHTML = '';
+  DIMS.forEach(d => {
+    const score = dimScores[d.id];
+    const isStrong = score >= 75, isMid = score >= 50;
+    const badgeClass = isStrong ? 'badge-strong' : isMid ? 'badge-mid' : 'badge-weak';
+    const barClass   = isStrong ? 'bar-strong'   : isMid ? 'bar-mid'   : 'bar-weak';
+    const level      = isStrong ? 'Strong'        : isMid ? 'Building'  : 'Needs work';
+    const insightKey = isStrong ? 'strong'        : isMid ? 'mid'       : 'weak';
+
+    const card = document.createElement('div');
+    card.className = 'dim-card';
+    card.innerHTML =
+      '<div class="dim-header">' +
+        '<span class="dim-name">' + d.icon + '  ' + d.label + '</span>' +
+        '<span class="dim-badge ' + badgeClass + '">' + score + '/100 · ' + level + '</span>' +
+      '</div>' +
+      '<div class="dim-bar-bg"><div class="dim-bar-fill ' + barClass + '" style="width:' + score + '%"></div></div>' +
+      '<div class="dim-insight">' + DIM_INSIGHTS[d.id][insightKey] + '</div>';
+    grid.appendChild(card);
+  });
+
+  /* Action plan */
+  const container = document.getElementById('action-cards');
+  container.innerHTML = '';
+  actionList.forEach(a => {
+    const card = document.createElement('div');
+    card.className = 'action-card';
+    card.innerHTML =
+      '<div class="action-priority">' + a.priority + ' · ' + a.dimLabel + '</div>' +
+      '<div class="action-title">' + a.title + '</div>' +
+      '<div class="action-text">' + a.text + '</div>';
+    container.appendChild(card);
+  });
+
+  showScreen('results');
+}
+
+/* ══════════════════════════════════════════
+   RESTART
+══════════════════════════════════════════ */
+function restartQuiz() {
+  current = 0; answers = new Array(24).fill(null);
+  dimScores = {}; overallScore = 0; tierText = ''; actionList = [];
+  userName = ''; userEmail = '';
+  document.getElementById('gate-form').style.display       = 'block';
+  document.getElementById('gate-submitting').style.display = 'none';
+  document.getElementById('input-name').value               = '';
+  document.getElementById('input-email').value              = '';
+  document.getElementById('chk-report').checked             = true;
+  document.getElementById('email-sent-banner').style.display = 'none';
+  showScreen('intro');
+}
+
+/* ══════════════════════════════════════════
+   INIT EmailJS if configured
+══════════════════════════════════════════ */
+if (CONFIG.EMAILJS_PUBLIC_KEY !== 'YOUR_EMAILJS_PUBLIC_KEY') {
+  emailjs.init({ publicKey: CONFIG.EMAILJS_PUBLIC_KEY });
+}
+</script>
+</body>
+</html>
