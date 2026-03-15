@@ -17,7 +17,7 @@
 ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░ -->
 <script>
 const CONFIG = {
-  SHEETS_URL:          'https://script.google.com/u/1/home/projects/19yIPVCO63yzftSloe4fLcJyLD8PSCCYblEwDMRbo1agmcr7qmWoSCgtV/edit',
+  SHEETS_URL:          'https://script.google.com/macros/s/AKfycbwe14hVz7zo-H5GVQIyeOvEtWZempv_BPWsc0-lcnYNsuytnerKI0ImJwJhamgneLZ2rw/exec',
   EMAILJS_PUBLIC_KEY:  'KfIpGB8vKMYLWLvmi',
   EMAILJS_SERVICE_ID:  'service_493glvi',
   EMAILJS_TEMPLATE_ID: 'template_g3x9nqu',
@@ -456,7 +456,7 @@ function submitGate(){
 
   /* Send to Google Sheets */
   var sheetsReady = CONFIG.SHEETS_URL &&
-    CONFIG.SHEETS_URL !== 'https://script.google.com/u/1/home/projects/19yIPVCO63yzftSloe4fLcJyLD8PSCCYblEwDMRbo1agmcr7qmWoSCgtV/edit';
+    CONFIG.SHEETS_URL !== 'YOUR_APPS_SCRIPT_EXEC_URL_HERE';
 
   var sheetsPromise = sheetsReady
     ? fetch(CONFIG.SHEETS_URL,{method:'POST',mode:'no-cors',headers:{'Content-Type':'application/json'},body:JSON.stringify(sheetsPayload)}).catch(function(err){console.warn('Sheets error:',err);return null;})
@@ -593,10 +593,8 @@ function restartQuiz(){
 }
 
 /* ── INIT EmailJS ── */
-if(CONFIG.EMAILJS_PUBLIC_KEY !== 'KfIpGB8vKMYLWLvmi'){
-  emailjs.init({publicKey: CONFIG.EMAILJS_PUBLIC_KEY});
-  console.log('EmailJS initialised with service:', CONFIG.EMAILJS_SERVICE_ID);
-}
+emailjs.init({publicKey: CONFIG.EMAILJS_PUBLIC_KEY});
+console.log('EmailJS initialised with service:', CONFIG.EMAILJS_SERVICE_ID);
 </script>
 </body>
 </html>
