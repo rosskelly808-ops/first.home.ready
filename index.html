@@ -17,7 +17,7 @@
 ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░ -->
 <script>
 const CONFIG = {
-  SHEETS_URL:          'https://script.google.com/macros/s/AKfycbwe14hVz7zo-H5GVQIyeOvEtWZempv_BPWsc0-lcnYNsuytnerKI0ImJwJhamgneLZ2rw/exec',
+  SHEETS_URL:          'https://script.google.com/macros/s/AKfycbzgdT23JZSX8YX2Y4XJFpWQyNwck5kCZgABfwcdojglsznZMyDDwloi2wRrRZThpr6kXA/exec',
   EMAILJS_PUBLIC_KEY:  'KfIpGB8vKMYLWLvmi',
   EMAILJS_SERVICE_ID:  'service_493glvi',
   EMAILJS_TEMPLATE_ID: 'template_o3nuv2o',
@@ -456,7 +456,7 @@ function submitGate(){
 
   /* Send to Google Sheets */
   var sheetsReady = CONFIG.SHEETS_URL &&
-    CONFIG.SHEETS_URL !== 'YOUR_APPS_SCRIPT_EXEC_URL_HERE';
+    CONFIG.SHEETS_URL !== 'https://script.google.com/macros/s/AKfycbzgdT23JZSX8YX2Y4XJFpWQyNwck5kCZgABfwcdojglsznZMyDDwloi2wRrRZThpr6kXA/exec';
 
   var sheetsPromise = sheetsReady
     ? fetch(CONFIG.SHEETS_URL,{method:'POST',mode:'no-cors',headers:{'Content-Type':'application/json'},body:JSON.stringify(sheetsPayload)}).catch(function(err){console.warn('Sheets error:',err);return null;})
