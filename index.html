@@ -17,10 +17,10 @@
 ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░ -->
 <script>
 const CONFIG = {
-  SHEETS_URL:          'https://script.google.com/u/1/home/projects/19yIPVCO63yzftSloe4fLcJyLD8PSCCYblEwDMRbo1agmcr7qmWoSCgtV/edit',
+  SHEETS_URL:          'YOUR_APPS_SCRIPT_EXEC_URL_HERE',
   EMAILJS_PUBLIC_KEY:  'KfIpGB8vKMYLWLvmi',
   EMAILJS_SERVICE_ID:  'service_493glvi',
-  EMAILJS_TEMPLATE_ID: 'template_o3nuv2o',
+  EMAILJS_TEMPLATE_ID: 'YOUR_TEMPLATE_ID_HERE',
 };
 </script>
 
@@ -465,7 +465,7 @@ function submitGate(){
   /* Send email via EmailJS */
   var emailReady = CONFIG.EMAILJS_PUBLIC_KEY !== 'YOUR_EMAILJS_PUBLIC_KEY' &&
     CONFIG.EMAILJS_SERVICE_ID !== 'YOUR_EMAILJS_SERVICE_ID' &&
-    CONFIG.EMAILJS_TEMPLATE_ID !== 'template_o3nuv2o';
+    CONFIG.EMAILJS_TEMPLATE_ID !== 'YOUR_TEMPLATE_ID_HERE';
 
   console.log('EmailJS config check:', {
     emailReady: emailReady,
@@ -475,24 +475,55 @@ function submitGate(){
     publicKey: CONFIG.EMAILJS_PUBLIC_KEY.substring(0,5)+'...'
   });
 
+  /* Helper: get insight text for a dimension score */
+  function getInsight(dimId, score){
+    var key = score>=75?'strong':score>=50?'mid':'weak';
+    return DIM_INSIGHTS[dimId][key];
+  }
+
   var emailPromise = (wantsReport && emailReady)
     ? emailjs.send(
         CONFIG.EMAILJS_SERVICE_ID,
         CONFIG.EMAILJS_TEMPLATE_ID,
         {
+          /* recipient */
           to_email:      userEmail,
           to_name:       userName,
+
+          /* overall */
           overall_score: String(overallScore),
           tier:          tierText,
+
+          /* dimension scores */
           financial:     String(dimScores.financial),
           borrowing:     String(dimScores.borrowing),
           market:        String(dimScores.market),
           process:       String(dimScores.process),
           decision:      String(dimScores.decision),
           emotional:     String(dimScores.emotional),
-          top_action_1:  actionList[0]?actionList[0].title+' — '+actionList[0].text:'N/A',
-          top_action_2:  actionList[1]?actionList[1].title+' — '+actionList[1].text:'N/A',
-          top_action_3:  actionList[2]?actionList[2].title+' — '+actionList[2].text:'N/A'
+
+          /* dimension insights (used in email template cards) */
+          financial_insight: getInsight('financial', dimScores.financial),
+          borrowing_insight:  getInsight('borrowing',  dimScores.borrowing),
+          market_insight:     getInsight('market',     dimScores.market),
+          process_insight:    getInsight('process',    dimScores.process),
+          decision_insight:   getInsight('decision',   dimScores.decision),
+          emotional_insight:  getInsight('emotional',  dimScores.emotional),
+
+          /* action 1 — split into priority, title, text */
+          action1_priority: actionList[0]?actionList[0].priority+' · '+actionList[0].dimLabel:'',
+          action1_title:    actionList[0]?actionList[0].title:'',
+          action1_text:     actionList[0]?actionList[0].text:'',
+
+          /* action 2 */
+          action2_priority: actionList[1]?actionList[1].priority+' · '+actionList[1].dimLabel:'',
+          action2_title:    actionList[1]?actionList[1].title:'',
+          action2_text:     actionList[1]?actionList[1].text:'',
+
+          /* action 3 */
+          action3_priority: actionList[2]?actionList[2].priority+' · '+actionList[2].dimLabel:'',
+          action3_title:    actionList[2]?actionList[2].title:'',
+          action3_text:     actionList[2]?actionList[2].text:''
         }
       ).then(function(res){
         console.log('EmailJS SUCCESS:', res);
