@@ -17,7 +17,7 @@
 ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░ -->
 <script>
 const CONFIG = {
-  SHEETS_URL:          'https://script.google.com/macros/s/AKfycbzgdT23JZSX8YX2Y4XJFpWQyNwck5kCZgABfwcdojglsznZMyDDwloi2wRrRZThpr6kXA/exec',
+  SHEETS_URL:          'https://script.google.com/macros/s/AKfycbyuLUe_InE6Tm8yokDsZDLLPabvioh69SkvlqXYl9KWHwGLyR6BOETSTN3I18aWG1vJ6g/exec',
   EMAILJS_PUBLIC_KEY:  'KfIpGB8vKMYLWLvmi',
   EMAILJS_SERVICE_ID:  'service_493glvi',
   EMAILJS_TEMPLATE_ID: 'template_o3nuv2o',
@@ -456,7 +456,7 @@ function submitGate(){
 
   /* Send to Google Sheets */
   var sheetsReady = CONFIG.SHEETS_URL &&
-    CONFIG.SHEETS_URL !== 'https://script.google.com/macros/s/AKfycbzgdT23JZSX8YX2Y4XJFpWQyNwck5kCZgABfwcdojglsznZMyDDwloi2wRrRZThpr6kXA/exec';
+    CONFIG.SHEETS_URL !== 'https://script.google.com/macros/s/AKfycbyuLUe_InE6Tm8yokDsZDLLPabvioh69SkvlqXYl9KWHwGLyR6BOETSTN3I18aWG1vJ6g/exec';
 
   var sheetsPromise = sheetsReady
     ? fetch(CONFIG.SHEETS_URL,{method:'POST',mode:'no-cors',headers:{'Content-Type':'application/json'},body:JSON.stringify(sheetsPayload)}).catch(function(err){console.warn('Sheets error:',err);return null;})
