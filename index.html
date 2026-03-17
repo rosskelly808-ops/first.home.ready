@@ -92,27 +92,27 @@ body { font-family:'DM Sans',sans-serif; background:var(--cream); color:var(--te
 .get-card h3 { font-size:16px; font-weight:500; color:var(--white); margin-bottom:0.5rem; }
 .get-card p { font-size:13px; color:rgba(255,255,255,0.55); line-height:1.6; }
 
-/* ABOUT */
-.about-section { background:var(--cream); }
-.about-inner { display:grid; grid-template-columns:1fr 1fr; gap:4rem; align-items:center; }
-.about-avatar { width:80px; height:80px; border-radius:50%; background:var(--navy); display:flex; align-items:center; justify-content:center; font-family:'DM Serif Display',serif; font-size:28px; color:var(--gold); margin-bottom:1.5rem; border:3px solid var(--gold-light); }
-.about-text h2 { font-family:'DM Serif Display',serif; font-size:clamp(24px,3.5vw,34px); color:var(--navy); line-height:1.2; margin-bottom:1rem; }
-.about-text p { font-size:15px; color:var(--muted); line-height:1.75; margin-bottom:1rem; }
-.about-credentials { display:flex; flex-direction:column; gap:10px; margin-top:1.5rem; }
-.cred-item { display:flex; align-items:center; gap:10px; font-size:14px; color:var(--navy); }
-.cred-dot { width:8px; height:8px; border-radius:50%; background:var(--gold); flex-shrink:0; }
-.about-card { background:var(--white); border:0.5px solid var(--border); border-radius:18px; padding:2rem; }
-.about-card-score { background:var(--navy); border-radius:12px; padding:1.5rem; text-align:center; margin-bottom:1.5rem; }
-.about-card-score-num { font-family:'DM Serif Display',serif; font-size:56px; color:var(--gold); line-height:1; }
-.about-card-score-label { font-size:13px; color:rgba(255,255,255,0.5); margin-top:4px; }
-.about-card-score-tier { font-size:14px; color:var(--white); margin-top:8px; font-weight:500; }
-.about-card-dims { display:flex; flex-direction:column; gap:10px; }
-.about-dim { display:flex; flex-direction:column; gap:4px; }
-.about-dim-header { display:flex; justify-content:space-between; font-size:12px; }
-.about-dim-label { color:var(--navy); font-weight:500; }
-.about-dim-score { color:var(--muted); }
-.about-dim-bar { height:4px; background:var(--border); border-radius:2px; overflow:hidden; }
-.about-dim-fill { height:100%; border-radius:2px; background:var(--gold); }
+/* WHY THIS EXISTS — replaces about section */
+.why-section { background:var(--cream); }
+.why-inner { display:grid; grid-template-columns:1fr 1fr; gap:4rem; align-items:center; }
+.why-text h2 { font-family:'DM Serif Display',serif; font-size:clamp(24px,3.5vw,34px); color:var(--navy); line-height:1.2; margin-bottom:1rem; }
+.why-text p { font-size:15px; color:var(--muted); line-height:1.75; margin-bottom:1rem; }
+.why-points { display:flex; flex-direction:column; gap:12px; margin-top:1.5rem; }
+.why-point { display:flex; align-items:flex-start; gap:12px; }
+.why-dot { width:8px; height:8px; border-radius:50%; background:var(--gold); flex-shrink:0; margin-top:6px; }
+.why-point-text { font-size:14px; color:var(--navy); line-height:1.5; }
+.why-card { background:var(--white); border:0.5px solid var(--border); border-radius:18px; padding:2rem; }
+.why-card-score { background:var(--navy); border-radius:12px; padding:1.5rem; text-align:center; margin-bottom:1.5rem; }
+.why-card-score-num { font-family:'DM Serif Display',serif; font-size:56px; color:var(--gold); line-height:1; }
+.why-card-score-label { font-size:13px; color:rgba(255,255,255,0.5); margin-top:4px; }
+.why-card-score-tier { font-size:14px; color:var(--white); margin-top:8px; font-weight:500; }
+.why-card-dims { display:flex; flex-direction:column; gap:10px; }
+.why-dim { display:flex; flex-direction:column; gap:4px; }
+.why-dim-header { display:flex; justify-content:space-between; font-size:12px; }
+.why-dim-label { color:var(--navy); font-weight:500; }
+.why-dim-score { color:var(--muted); }
+.why-dim-bar { height:4px; background:var(--border); border-radius:2px; overflow:hidden; }
+.why-dim-fill { height:100%; border-radius:2px; background:var(--gold); }
 
 /* FAQ */
 .faq-section { background:var(--white); }
@@ -145,7 +145,7 @@ body { font-family:'DM Sans',sans-serif; background:var(--cream); color:var(--te
   .steps::before{display:none;}
   .dims-grid{grid-template-columns:1fr 1fr;}
   .get-grid{grid-template-columns:1fr;}
-  .about-inner{grid-template-columns:1fr;gap:2rem;}
+  .why-inner{grid-template-columns:1fr;gap:2rem;}
   .hero-stats{gap:1.5rem;}
   .pain-quote{padding:1.5rem;}
 }
@@ -267,34 +267,33 @@ body { font-family:'DM Sans',sans-serif; background:var(--cream); color:var(--te
   </div>
 </section>
 
-<!-- ABOUT -->
-<section class="section about-section">
+<!-- WHY THIS EXISTS -->
+<section class="section why-section">
   <div class="section-inner">
-    <div class="about-inner">
-      <div class="about-text">
-        <div class="about-avatar">RK</div>
-        <h2>Built by someone who did the research — not just the marketing.</h2>
-        <p>I'm Ross — a Finance and Business student at the Australian National University, with a background in business analysis and a genuine frustration with how little useful, unbiased content exists for Australian first-home buyers.</p>
-        <p>This tool was built after spending hundreds of hours in the research, talking to buyers, and identifying the exact gaps that cause people to either panic-buy or burn out. It's not financial advice — it's a diagnosis. And it's free.</p>
-        <div class="about-credentials">
-          <div class="cred-item"><span class="cred-dot"></span>Business Administration & Finance, ANU (GPA 6.05/7)</div>
-          <div class="cred-item"><span class="cred-dot"></span>Business Analyst Intern — Australian Institute of Health & Welfare</div>
-          <div class="cred-item"><span class="cred-dot"></span>Built for Australians, by an Australian</div>
+    <div class="why-inner">
+      <div class="why-text">
+        <h2>Built from the research, not the marketing.</h2>
+        <p>Most first-home buyer content tells you the same things: save your deposit, get pre-approval, find a good broker. You already know this. What's missing is a clear picture of where <em>you specifically</em> stand right now.</p>
+        <p>This tool was built after deep research into the real pain points Australian first-home buyers experience — the decision paralysis, the market confusion, the emotional exhaustion. It's not financial advice. It's a diagnosis.</p>
+        <div class="why-points">
+          <div class="why-point"><span class="why-dot"></span><span class="why-point-text">Built specifically for the Australian market — government schemes, state-specific processes, Australian lenders</span></div>
+          <div class="why-point"><span class="why-dot"></span><span class="why-point-text">No generic advice — every action plan is personalised to your actual scores</span></div>
+          <div class="why-point"><span class="why-dot"></span><span class="why-point-text">Free, unbiased, and not trying to sell you a mortgage</span></div>
         </div>
       </div>
-      <div class="about-card">
-        <div class="about-card-score">
-          <div class="about-card-score-num">74</div>
-          <div class="about-card-score-label">out of 100</div>
-          <div class="about-card-score-tier">Building momentum — a few key gaps to close.</div>
+      <div class="why-card">
+        <div class="why-card-score">
+          <div class="why-card-score-num">74</div>
+          <div class="why-card-score-label">out of 100</div>
+          <div class="why-card-score-tier">Building momentum — a few key gaps to close.</div>
         </div>
-        <div class="about-card-dims">
-          <div class="about-dim"><div class="about-dim-header"><span class="about-dim-label">🏦 Financial Preparation</span><span class="about-dim-score">88/100</span></div><div class="about-dim-bar"><div class="about-dim-fill" style="width:88%;background:#3B6D11;"></div></div></div>
-          <div class="about-dim"><div class="about-dim-header"><span class="about-dim-label">💳 Borrowing Capacity</span><span class="about-dim-score">63/100</span></div><div class="about-dim-bar"><div class="about-dim-fill" style="width:63%;"></div></div></div>
-          <div class="about-dim"><div class="about-dim-header"><span class="about-dim-label">📊 Market Knowledge</span><span class="about-dim-score">56/100</span></div><div class="about-dim-bar"><div class="about-dim-fill" style="width:56%;"></div></div></div>
-          <div class="about-dim"><div class="about-dim-header"><span class="about-dim-label">📋 Process Understanding</span><span class="about-dim-score">75/100</span></div><div class="about-dim-bar"><div class="about-dim-fill" style="width:75%;background:#3B6D11;"></div></div></div>
-          <div class="about-dim"><div class="about-dim-header"><span class="about-dim-label">🎯 Decision Clarity</span><span class="about-dim-score">81/100</span></div><div class="about-dim-bar"><div class="about-dim-fill" style="width:81%;background:#3B6D11;"></div></div></div>
-          <div class="about-dim"><div class="about-dim-header"><span class="about-dim-label">🧠 Emotional Readiness</span><span class="about-dim-score">69/100</span></div><div class="about-dim-bar"><div class="about-dim-fill" style="width:69%;"></div></div></div>
+        <div class="why-card-dims">
+          <div class="why-dim"><div class="why-dim-header"><span class="why-dim-label">🏦 Financial Preparation</span><span class="why-dim-score">88/100</span></div><div class="why-dim-bar"><div class="why-dim-fill" style="width:88%;background:#3B6D11;"></div></div></div>
+          <div class="why-dim"><div class="why-dim-header"><span class="why-dim-label">💳 Borrowing Capacity</span><span class="why-dim-score">63/100</span></div><div class="why-dim-bar"><div class="why-dim-fill" style="width:63%;"></div></div></div>
+          <div class="why-dim"><div class="why-dim-header"><span class="why-dim-label">📊 Market Knowledge</span><span class="why-dim-score">56/100</span></div><div class="why-dim-bar"><div class="why-dim-fill" style="width:56%;"></div></div></div>
+          <div class="why-dim"><div class="why-dim-header"><span class="why-dim-label">📋 Process Understanding</span><span class="why-dim-score">75/100</span></div><div class="why-dim-bar"><div class="why-dim-fill" style="width:75%;background:#3B6D11;"></div></div></div>
+          <div class="why-dim"><div class="why-dim-header"><span class="why-dim-label">🎯 Decision Clarity</span><span class="why-dim-score">81/100</span></div><div class="why-dim-bar"><div class="why-dim-fill" style="width:81%;background:#3B6D11;"></div></div></div>
+          <div class="why-dim"><div class="why-dim-header"><span class="why-dim-label">🧠 Emotional Readiness</span><span class="why-dim-score">69/100</span></div><div class="why-dim-bar"><div class="why-dim-fill" style="width:69%;"></div></div></div>
         </div>
       </div>
     </div>
@@ -334,7 +333,7 @@ body { font-family:'DM Sans',sans-serif; background:var(--cream); color:var(--te
 <footer class="footer">
   <p>First Home Ready Score is an educational tool only and does not constitute financial advice.<br>
   Always consult a licensed mortgage broker or financial adviser before making property decisions.<br><br>
-  © 2026 First Home Ready · Built by Ross Kelly · Canberra, Australia</p>
+  © 2026 First Home Ready · Australia</p>
 </footer>
 
 <script>
