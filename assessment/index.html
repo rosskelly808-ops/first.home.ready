@@ -1,0 +1,351 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>First Home Ready — Know Exactly Where You Stand</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+:root {
+  --navy:#1B2A4A; --navy-dark:#111d33; --navy-mid:#243655;
+  --gold:#C9A84C; --gold-light:#F5EDD6; --gold-dark:#b8952e;
+  --cream:#FAF8F4; --white:#ffffff; --text:#2C2C2A;
+  --muted:#888780; --border:#D3D1C7;
+  --success:#3B6D11; --success-bg:#EAF3DE;
+}
+html { scroll-behavior: smooth; }
+body { font-family:'DM Sans',sans-serif; background:var(--cream); color:var(--text); -webkit-font-smoothing:antialiased; overflow-x:hidden; }
+
+/* NAV */
+.nav { background:var(--white); border-bottom:0.5px solid var(--border); padding:0 2rem; height:64px; display:flex; align-items:center; justify-content:space-between; position:sticky; top:0; z-index:100; }
+.nav-logo { font-family:'DM Serif Display',serif; font-size:20px; color:var(--navy); text-decoration:none; }
+.nav-logo span { color:var(--gold); }
+.nav-cta { background:var(--navy); color:var(--white); font-family:'DM Sans',sans-serif; font-size:14px; font-weight:500; padding:10px 20px; border-radius:8px; text-decoration:none; transition:background 0.2s; }
+.nav-cta:hover { background:var(--navy-dark); }
+
+/* HERO */
+.hero { background:var(--navy); padding:6rem 1.5rem 5rem; text-align:center; position:relative; overflow:hidden; }
+.hero::before { content:''; position:absolute; top:-80px; right:-80px; width:400px; height:400px; border-radius:50%; background:radial-gradient(circle,rgba(201,168,76,0.12) 0%,transparent 70%); pointer-events:none; }
+.hero::after { content:''; position:absolute; bottom:-60px; left:-60px; width:300px; height:300px; border-radius:50%; background:radial-gradient(circle,rgba(201,168,76,0.08) 0%,transparent 70%); pointer-events:none; }
+.hero-badge { display:inline-block; background:rgba(201,168,76,0.15); color:var(--gold); font-size:11px; font-weight:500; padding:6px 16px; border-radius:20px; margin-bottom:1.75rem; letter-spacing:0.07em; text-transform:uppercase; border:1px solid rgba(201,168,76,0.25); animation:fadeUp 0.6s ease both; }
+.hero h1 { font-family:'DM Serif Display',serif; font-size:clamp(32px,6vw,58px); line-height:1.12; color:var(--white); margin-bottom:1.25rem; max-width:720px; margin-left:auto; margin-right:auto; animation:fadeUp 0.6s 0.1s ease both; }
+.hero h1 em { font-style:italic; color:var(--gold); }
+.hero-sub { font-size:clamp(16px,2vw,18px); color:rgba(255,255,255,0.7); line-height:1.7; max-width:520px; margin:0 auto 2.5rem; animation:fadeUp 0.6s 0.2s ease both; }
+.hero-cta-wrap { display:flex; flex-direction:column; align-items:center; gap:12px; animation:fadeUp 0.6s 0.3s ease both; }
+.btn-hero { display:inline-block; background:var(--gold); color:var(--navy); font-family:'DM Sans',sans-serif; font-size:17px; font-weight:500; padding:18px 36px; border-radius:10px; text-decoration:none; transition:background 0.2s,transform 0.1s; }
+.btn-hero:hover { background:var(--gold-dark); }
+.btn-hero:active { transform:scale(0.98); }
+.hero-note { font-size:13px; color:rgba(255,255,255,0.45); }
+.hero-stats { display:flex; justify-content:center; gap:2.5rem; margin-top:4rem; flex-wrap:wrap; animation:fadeUp 0.6s 0.4s ease both; }
+.hero-stat { text-align:center; }
+.hero-stat-num { font-family:'DM Serif Display',serif; font-size:32px; color:var(--gold); line-height:1; display:block; }
+.hero-stat-label { font-size:12px; color:rgba(255,255,255,0.5); margin-top:4px; }
+@keyframes fadeUp { from{opacity:0;transform:translateY(16px);}to{opacity:1;transform:translateY(0);} }
+
+/* SECTIONS */
+.section { padding:5rem 1.5rem; }
+.section-inner { max-width:1000px; margin:0 auto; }
+.section-label { font-size:11px; font-weight:500; text-transform:uppercase; letter-spacing:0.08em; color:var(--gold-dark); margin-bottom:0.75rem; }
+.section-heading { font-family:'DM Serif Display',serif; font-size:clamp(26px,4vw,38px); color:var(--navy); line-height:1.2; margin-bottom:1rem; }
+.section-heading em { font-style:italic; color:var(--gold); }
+.section-sub { font-size:16px; color:var(--muted); line-height:1.7; max-width:560px; }
+
+/* PAIN */
+.pain-section { background:var(--white); }
+.pain-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:16px; margin-top:3rem; }
+.pain-card { background:var(--cream); border:0.5px solid var(--border); border-radius:14px; padding:1.5rem; }
+.pain-icon { font-size:28px; display:block; margin-bottom:1rem; }
+.pain-card h3 { font-size:15px; font-weight:500; color:var(--navy); margin-bottom:0.5rem; line-height:1.4; }
+.pain-card p { font-size:13px; color:var(--muted); line-height:1.6; }
+.pain-quote { background:var(--navy); border-radius:14px; padding:2rem 2.5rem; margin-top:2rem; position:relative; }
+.pain-quote::before { content:'"'; font-family:'DM Serif Display',serif; font-size:80px; color:var(--gold); opacity:0.3; position:absolute; top:0.5rem; left:1.5rem; line-height:1; }
+.pain-quote p { font-family:'DM Serif Display',serif; font-size:clamp(17px,2.5vw,22px); color:var(--white); line-height:1.5; font-style:italic; position:relative; z-index:1; }
+.pain-quote cite { display:block; font-size:13px; color:rgba(255,255,255,0.45); margin-top:0.75rem; font-style:normal; }
+
+/* HOW IT WORKS */
+.how-section { background:var(--cream); }
+.steps { display:grid; grid-template-columns:repeat(3,1fr); gap:16px; margin-top:3rem; position:relative; }
+.steps::before { content:''; position:absolute; top:36px; left:calc(16.66% + 16px); right:calc(16.66% + 16px); height:1px; background:var(--border); z-index:0; }
+.step { text-align:center; position:relative; z-index:1; }
+.step-num { width:52px; height:52px; border-radius:50%; background:var(--navy); color:var(--white); font-family:'DM Serif Display',serif; font-size:20px; display:flex; align-items:center; justify-content:center; margin:0 auto 1.25rem; border:3px solid var(--cream); box-shadow:0 0 0 1px var(--border); }
+.step h3 { font-size:15px; font-weight:500; color:var(--navy); margin-bottom:0.5rem; }
+.step p { font-size:13px; color:var(--muted); line-height:1.6; }
+
+/* DIMENSIONS */
+.dims-section { background:var(--white); }
+.dims-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:12px; margin-top:3rem; }
+.dim-card { background:var(--cream); border:0.5px solid var(--border); border-radius:12px; padding:1.25rem; display:flex; align-items:flex-start; gap:12px; }
+.dim-icon { font-size:24px; flex-shrink:0; width:44px; height:44px; background:var(--white); border:0.5px solid var(--border); border-radius:10px; display:flex; align-items:center; justify-content:center; }
+.dim-body h3 { font-size:14px; font-weight:500; color:var(--navy); margin-bottom:3px; }
+.dim-body p { font-size:12px; color:var(--muted); line-height:1.5; }
+
+/* WHAT YOU GET */
+.get-section { background:var(--navy); }
+.get-section .section-label { color:rgba(201,168,76,0.7); }
+.get-section .section-heading { color:var(--white); }
+.get-section .section-sub { color:rgba(255,255,255,0.6); }
+.get-grid { display:grid; grid-template-columns:1fr 1fr; gap:16px; margin-top:3rem; }
+.get-card { background:rgba(255,255,255,0.06); border:0.5px solid rgba(255,255,255,0.12); border-radius:14px; padding:1.5rem; }
+.get-card-icon { font-size:28px; margin-bottom:1rem; display:block; }
+.get-card h3 { font-size:16px; font-weight:500; color:var(--white); margin-bottom:0.5rem; }
+.get-card p { font-size:13px; color:rgba(255,255,255,0.55); line-height:1.6; }
+
+/* ABOUT */
+.about-section { background:var(--cream); }
+.about-inner { display:grid; grid-template-columns:1fr 1fr; gap:4rem; align-items:center; }
+.about-avatar { width:80px; height:80px; border-radius:50%; background:var(--navy); display:flex; align-items:center; justify-content:center; font-family:'DM Serif Display',serif; font-size:28px; color:var(--gold); margin-bottom:1.5rem; border:3px solid var(--gold-light); }
+.about-text h2 { font-family:'DM Serif Display',serif; font-size:clamp(24px,3.5vw,34px); color:var(--navy); line-height:1.2; margin-bottom:1rem; }
+.about-text p { font-size:15px; color:var(--muted); line-height:1.75; margin-bottom:1rem; }
+.about-credentials { display:flex; flex-direction:column; gap:10px; margin-top:1.5rem; }
+.cred-item { display:flex; align-items:center; gap:10px; font-size:14px; color:var(--navy); }
+.cred-dot { width:8px; height:8px; border-radius:50%; background:var(--gold); flex-shrink:0; }
+.about-card { background:var(--white); border:0.5px solid var(--border); border-radius:18px; padding:2rem; }
+.about-card-score { background:var(--navy); border-radius:12px; padding:1.5rem; text-align:center; margin-bottom:1.5rem; }
+.about-card-score-num { font-family:'DM Serif Display',serif; font-size:56px; color:var(--gold); line-height:1; }
+.about-card-score-label { font-size:13px; color:rgba(255,255,255,0.5); margin-top:4px; }
+.about-card-score-tier { font-size:14px; color:var(--white); margin-top:8px; font-weight:500; }
+.about-card-dims { display:flex; flex-direction:column; gap:10px; }
+.about-dim { display:flex; flex-direction:column; gap:4px; }
+.about-dim-header { display:flex; justify-content:space-between; font-size:12px; }
+.about-dim-label { color:var(--navy); font-weight:500; }
+.about-dim-score { color:var(--muted); }
+.about-dim-bar { height:4px; background:var(--border); border-radius:2px; overflow:hidden; }
+.about-dim-fill { height:100%; border-radius:2px; background:var(--gold); }
+
+/* FAQ */
+.faq-section { background:var(--white); }
+.faq-list { margin-top:2.5rem; display:flex; flex-direction:column; }
+.faq-item { border-bottom:0.5px solid var(--border); padding:1.25rem 0; }
+.faq-item:first-child { border-top:0.5px solid var(--border); }
+.faq-q { font-size:15px; font-weight:500; color:var(--navy); cursor:pointer; display:flex; justify-content:space-between; align-items:center; gap:1rem; user-select:none; }
+.faq-q::after { content:'+'; font-size:20px; color:var(--gold); flex-shrink:0; transition:transform 0.2s; }
+.faq-item.open .faq-q::after { transform:rotate(45deg); }
+.faq-a { font-size:14px; color:var(--muted); line-height:1.7; max-height:0; overflow:hidden; transition:max-height 0.3s ease,padding 0.3s ease; }
+.faq-item.open .faq-a { max-height:200px; padding-top:0.75rem; }
+
+/* FINAL CTA */
+.cta-section { background:var(--navy); padding:6rem 1.5rem; text-align:center; position:relative; overflow:hidden; }
+.cta-section::before { content:''; position:absolute; top:50%; left:50%; transform:translate(-50%,-50%); width:600px; height:600px; border-radius:50%; background:radial-gradient(circle,rgba(201,168,76,0.08) 0%,transparent 70%); pointer-events:none; }
+.cta-section h2 { font-family:'DM Serif Display',serif; font-size:clamp(28px,5vw,48px); color:var(--white); line-height:1.15; margin-bottom:1rem; position:relative; }
+.cta-section h2 em { font-style:italic; color:var(--gold); }
+.cta-section p { font-size:16px; color:rgba(255,255,255,0.6); margin-bottom:2.5rem; line-height:1.7; position:relative; }
+.cta-trust { display:flex; justify-content:center; gap:2rem; margin-top:1.5rem; flex-wrap:wrap; position:relative; }
+.cta-trust-item { display:flex; align-items:center; gap:6px; font-size:13px; color:rgba(255,255,255,0.45); }
+.cta-trust-dot { width:5px; height:5px; border-radius:50%; background:var(--gold); opacity:0.6; flex-shrink:0; }
+
+/* FOOTER */
+.footer { background:var(--navy-dark); padding:2rem 1.5rem; text-align:center; font-size:12px; color:rgba(255,255,255,0.3); line-height:1.7; border-top:0.5px solid rgba(255,255,255,0.08); }
+
+/* RESPONSIVE */
+@media(max-width:700px) {
+  .pain-grid{grid-template-columns:1fr;}
+  .steps{grid-template-columns:1fr;}
+  .steps::before{display:none;}
+  .dims-grid{grid-template-columns:1fr 1fr;}
+  .get-grid{grid-template-columns:1fr;}
+  .about-inner{grid-template-columns:1fr;gap:2rem;}
+  .hero-stats{gap:1.5rem;}
+  .pain-quote{padding:1.5rem;}
+}
+@media(max-width:480px) {
+  .dims-grid{grid-template-columns:1fr;}
+  .nav-cta{display:none;}
+}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav class="nav">
+  <a href="/" class="nav-logo">First Home <span>Ready</span></a>
+  <a href="/assessment" class="nav-cta">Take the Free Assessment →</a>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-badge">Free · 5 Minutes · Built for Australians</div>
+  <h1>Stop guessing.<br>Find out if you're <em>actually</em><br>ready to buy.</h1>
+  <p class="hero-sub">The free assessment that tells Australian first-home buyers exactly where they stand — and what to fix before they waste a single weekend at inspections.</p>
+  <div class="hero-cta-wrap">
+    <a href="/assessment" class="btn-hero">Get My Free Readiness Score →</a>
+    <span class="hero-note">No login · No credit card · Results in 5 minutes</span>
+  </div>
+  <div class="hero-stats">
+    <div class="hero-stat"><span class="hero-stat-num">24</span><span class="hero-stat-label">honest questions</span></div>
+    <div class="hero-stat"><span class="hero-stat-num">6</span><span class="hero-stat-label">readiness dimensions</span></div>
+    <div class="hero-stat"><span class="hero-stat-num">1</span><span class="hero-stat-label">clear action plan</span></div>
+    <div class="hero-stat"><span class="hero-stat-num">100%</span><span class="hero-stat-label">free</span></div>
+  </div>
+</section>
+
+<!-- PAIN -->
+<section class="section pain-section">
+  <div class="section-inner">
+    <div class="section-label">Sound familiar?</div>
+    <h2 class="section-heading">Buying your first home is supposed to be exciting.<br><em>So why does it feel like this?</em></h2>
+    <div class="pain-grid">
+      <div class="pain-card">
+        <span class="pain-icon">😰</span>
+        <h3>The stress is insane — and you're only weeks in</h3>
+        <p>Every Saturday is open homes. Every auction ends $100k over the guide. It feels like a second job with nothing to show for it.</p>
+      </div>
+      <div class="pain-card">
+        <span class="pain-icon">🌀</span>
+        <h3>You don't know whether to act now or keep waiting</h3>
+        <p>If you wait, will you be priced out? If you act now, are you settling? The uncertainty is the worst part and no one gives you a clear answer.</p>
+      </div>
+      <div class="pain-card">
+        <span class="pain-icon">🏦</span>
+        <h3>You thought you were ready. The bank had other ideas.</h3>
+        <p>Good salary. Solid savings. Decent credit. And somehow the bank comes back with a number that makes no sense.</p>
+      </div>
+    </div>
+    <div class="pain-quote">
+      <p>The problem isn't that you're not trying hard enough. The problem is that no one has ever shown you what <em>actually ready</em> looks like.</p>
+      <cite>— The gap every first-home buyer falls into</cite>
+    </div>
+  </div>
+</section>
+
+<!-- HOW IT WORKS -->
+<section class="section how-section">
+  <div class="section-inner">
+    <div class="section-label">How it works</div>
+    <h2 class="section-heading">Three steps to <em>total clarity</em></h2>
+    <p class="section-sub">No generic checklists. No vague advice. A personalised diagnosis of exactly where you stand and what to do next.</p>
+    <div class="steps">
+      <div class="step">
+        <div class="step-num">1</div>
+        <h3>Answer 24 honest questions</h3>
+        <p>Across 6 key readiness dimensions that actually determine whether you'll buy successfully or burn out trying.</p>
+      </div>
+      <div class="step">
+        <div class="step-num">2</div>
+        <h3>Get your personalised score</h3>
+        <p>See exactly where you're strong and where you have gaps — with a clear breakdown across each dimension.</p>
+      </div>
+      <div class="step">
+        <div class="step-num">3</div>
+        <h3>Follow your action plan</h3>
+        <p>A prioritised list of what to fix first, with specific next steps tailored to your score.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- DIMENSIONS -->
+<section class="section dims-section">
+  <div class="section-inner">
+    <div class="section-label">The 6 dimensions</div>
+    <h2 class="section-heading">Know exactly <em>where</em> you stand</h2>
+    <p class="section-sub">Most buyers only think about the deposit. Real readiness is more complex — and this assessment covers all of it.</p>
+    <div class="dims-grid">
+      <div class="dim-card"><div class="dim-icon">🏦</div><div class="dim-body"><h3>Financial Preparation</h3><p>Deposit, emergency fund, upfront costs, and government scheme eligibility.</p></div></div>
+      <div class="dim-card"><div class="dim-icon">💳</div><div class="dim-body"><h3>Borrowing Capacity</h3><p>Pre-approval, credit score, existing debt, and lender comparison.</p></div></div>
+      <div class="dim-card"><div class="dim-icon">📊</div><div class="dim-body"><h3>Market Knowledge</h3><p>Sold prices vs. listed prices, suburb trends, and property valuation confidence.</p></div></div>
+      <div class="dim-card"><div class="dim-icon">📋</div><div class="dim-body"><h3>Process Understanding</h3><p>Auctions, offers, conveyancing, building inspections, and settlement.</p></div></div>
+      <div class="dim-card"><div class="dim-icon">🎯</div><div class="dim-body"><h3>Decision Clarity</h3><p>Non-negotiables, budget ceiling, suburb shortlist, and criteria framework.</p></div></div>
+      <div class="dim-card"><div class="dim-icon">🧠</div><div class="dim-body"><h3>Emotional Readiness</h3><p>Stress levels, FOMO vs. genuine motivation, and support network strength.</p></div></div>
+    </div>
+  </div>
+</section>
+
+<!-- WHAT YOU GET -->
+<section class="section get-section">
+  <div class="section-inner">
+    <div class="section-label">What you receive</div>
+    <h2 class="section-heading">More than a score.<br><em>A complete picture.</em></h2>
+    <p class="section-sub">Every person who completes the assessment receives a personalised report — instantly, for free.</p>
+    <div class="get-grid">
+      <div class="get-card"><span class="get-card-icon">📈</span><h3>Overall Readiness Score</h3><p>A single number out of 100 that tells you exactly where you sit — and whether you're ready to start seriously looking.</p></div>
+      <div class="get-card"><span class="get-card-icon">🔍</span><h3>Dimension-by-Dimension Breakdown</h3><p>See which of your 6 dimensions are strong, which are building, and which need work before you set foot at an inspection.</p></div>
+      <div class="get-card"><span class="get-card-icon">🗺️</span><h3>Personalised Action Plan</h3><p>Your lowest-scoring dimensions generate specific, Australia-relevant actions — prioritised so you know exactly what to tackle first.</p></div>
+      <div class="get-card"><span class="get-card-icon">📧</span><h3>Full Report to Your Inbox</h3><p>Your complete results are emailed to you so you can refer back as you work through your preparation.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- ABOUT -->
+<section class="section about-section">
+  <div class="section-inner">
+    <div class="about-inner">
+      <div class="about-text">
+        <div class="about-avatar">RK</div>
+        <h2>Built by someone who did the research — not just the marketing.</h2>
+        <p>I'm Ross — a Finance and Business student at the Australian National University, with a background in business analysis and a genuine frustration with how little useful, unbiased content exists for Australian first-home buyers.</p>
+        <p>This tool was built after spending hundreds of hours in the research, talking to buyers, and identifying the exact gaps that cause people to either panic-buy or burn out. It's not financial advice — it's a diagnosis. And it's free.</p>
+        <div class="about-credentials">
+          <div class="cred-item"><span class="cred-dot"></span>Business Administration & Finance, ANU (GPA 6.05/7)</div>
+          <div class="cred-item"><span class="cred-dot"></span>Business Analyst Intern — Australian Institute of Health & Welfare</div>
+          <div class="cred-item"><span class="cred-dot"></span>Built for Australians, by an Australian</div>
+        </div>
+      </div>
+      <div class="about-card">
+        <div class="about-card-score">
+          <div class="about-card-score-num">74</div>
+          <div class="about-card-score-label">out of 100</div>
+          <div class="about-card-score-tier">Building momentum — a few key gaps to close.</div>
+        </div>
+        <div class="about-card-dims">
+          <div class="about-dim"><div class="about-dim-header"><span class="about-dim-label">🏦 Financial Preparation</span><span class="about-dim-score">88/100</span></div><div class="about-dim-bar"><div class="about-dim-fill" style="width:88%;background:#3B6D11;"></div></div></div>
+          <div class="about-dim"><div class="about-dim-header"><span class="about-dim-label">💳 Borrowing Capacity</span><span class="about-dim-score">63/100</span></div><div class="about-dim-bar"><div class="about-dim-fill" style="width:63%;"></div></div></div>
+          <div class="about-dim"><div class="about-dim-header"><span class="about-dim-label">📊 Market Knowledge</span><span class="about-dim-score">56/100</span></div><div class="about-dim-bar"><div class="about-dim-fill" style="width:56%;"></div></div></div>
+          <div class="about-dim"><div class="about-dim-header"><span class="about-dim-label">📋 Process Understanding</span><span class="about-dim-score">75/100</span></div><div class="about-dim-bar"><div class="about-dim-fill" style="width:75%;background:#3B6D11;"></div></div></div>
+          <div class="about-dim"><div class="about-dim-header"><span class="about-dim-label">🎯 Decision Clarity</span><span class="about-dim-score">81/100</span></div><div class="about-dim-bar"><div class="about-dim-fill" style="width:81%;background:#3B6D11;"></div></div></div>
+          <div class="about-dim"><div class="about-dim-header"><span class="about-dim-label">🧠 Emotional Readiness</span><span class="about-dim-score">69/100</span></div><div class="about-dim-bar"><div class="about-dim-fill" style="width:69%;"></div></div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FAQ -->
+<section class="section faq-section">
+  <div class="section-inner" style="max-width:680px;">
+    <div class="section-label">Questions</div>
+    <h2 class="section-heading">Everything you need to know</h2>
+    <div class="faq-list">
+      <div class="faq-item"><div class="faq-q">Is this actually free?</div><div class="faq-a">Yes, completely. No credit card, no trial, no catch. The assessment and your full personalised report are free.</div></div>
+      <div class="faq-item"><div class="faq-q">How long does it take?</div><div class="faq-a">Most people complete it in 4–6 minutes. There are 24 questions across 6 dimensions. Your results are shown immediately after you enter your email.</div></div>
+      <div class="faq-item"><div class="faq-q">Is this financial advice?</div><div class="faq-a">No. This is an educational tool only. It is designed to help you understand your own readiness — not to replace a mortgage broker, financial adviser, or conveyancer. Always consult a licensed professional before making property decisions.</div></div>
+      <div class="faq-item"><div class="faq-q">Who is this for?</div><div class="faq-a">Australian first-home buyers who are actively preparing to buy, or who are already searching and want clarity on where their gaps are. Most useful for buyers 3–18 months away from purchase.</div></div>
+      <div class="faq-item"><div class="faq-q">What happens to my email address?</div><div class="faq-a">Your email is used to send your report. We will not spam you or sell your data. You can unsubscribe from any follow-up communications at any time.</div></div>
+      <div class="faq-item"><div class="faq-q">Is the assessment Australian-specific?</div><div class="faq-a">Yes. Every question, insight, and action is built around the Australian property market — including government schemes, state-specific processes, and Australian lender behaviour.</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- FINAL CTA -->
+<section class="cta-section">
+  <h2>Find out where you <em>actually</em> stand.<br>In 5 minutes. For free.</h2>
+  <p>Join Australian first-home buyers who are getting serious about buying smart — not just buying fast.</p>
+  <a href="/assessment" class="btn-hero">Get My Free Readiness Score →</a>
+  <div class="cta-trust">
+    <div class="cta-trust-item"><span class="cta-trust-dot"></span>Takes 5 minutes</div>
+    <div class="cta-trust-item"><span class="cta-trust-dot"></span>No login required</div>
+    <div class="cta-trust-item"><span class="cta-trust-dot"></span>Results sent to your inbox</div>
+    <div class="cta-trust-item"><span class="cta-trust-dot"></span>100% free</div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer class="footer">
+  <p>First Home Ready Score is an educational tool only and does not constitute financial advice.<br>
+  Always consult a licensed mortgage broker or financial adviser before making property decisions.<br><br>
+  © 2026 First Home Ready · Built by Ross Kelly · Canberra, Australia</p>
+</footer>
+
+<script>
+document.querySelectorAll('.faq-item').forEach(function(item){
+  item.querySelector('.faq-q').addEventListener('click',function(){
+    var isOpen=item.classList.contains('open');
+    document.querySelectorAll('.faq-item').forEach(function(i){i.classList.remove('open');});
+    if(!isOpen)item.classList.add('open');
+  });
+});
+</script>
+
+</body>
+</html>
