@@ -455,8 +455,7 @@ function submitGate(){
   };
 
   /* Send to Google Sheets */
-  var sheetsReady = CONFIG.SHEETS_URL &&
-    CONFIG.SHEETS_URL !== 'https://script.google.com/macros/s/AKfycbyuLUe_InE6Tm8yokDsZDLLPabvioh69SkvlqXYl9KWHwGLyR6BOETSTN3I18aWG1vJ6g/exec';
+  var sheetsReady = true;
 
   var sheetsPromise = sheetsReady
     ? fetch(CONFIG.SHEETS_URL,{method:'POST',mode:'no-cors',headers:{'Content-Type':'application/json'},body:JSON.stringify(sheetsPayload)}).catch(function(err){console.warn('Sheets error:',err);return null;})
